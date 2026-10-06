@@ -77,12 +77,14 @@ DATAROOT/
 
 # IGNORE SPX ASSETS
 # ...but allow specific files and folders for GitHub
-ASSETS/**
+ASSETS/*
 !ASSETS/csv/csv-folder.md
 !ASSETS/excel/ticker-demo/basic-news-ticker.xlsx
-!ASSETS/fonts/**
-!ASSETS/media/**
-!ASSETS/templates/Nation/**
+!ASSETS/fonts/
+!ASSETS/media/
+!ASSETS/templates/
+ASSETS/templates/*
+!ASSETS/templates/Nation/
 # Add templates with:
 # git add ASSETS/templates/softpix/html/Template_Pack_1.4.0/** -f
 # git add ASSETS/templates/softpix/ograf/Template_Pack_1.4.0/** -f

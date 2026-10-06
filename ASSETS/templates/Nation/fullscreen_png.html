@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Fullscreen PNG Overlay</title>
+    <style>
+        /* CSS Reset & Structure */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            background-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Fullscreen SPX Window */
+        .SPXWindow {
+            position: relative;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            background-color: transparent;
+        }
+
+        /* Image Display Element */
+        #displayImage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Default, will be updated dynamically */
+            opacity: 0;          /* Start transparent, animated via JS */
+            display: none;       /* Hide initially to avoid layout shifts */
+        }
+
+        /* Hidden data fields container for SPX */
+        #hiddenSpxData {
+            display: none;
+        }
+    </style>
+
+    <script>
+        // Inline SPX Interface library to ensure 100% self-contained template
+        function update(data) {
+            console.log("SPX Update data received:", data);
+            try {
+                var templateData = JSON.parse(data);
+                for (var dataField in templateData) {
+                    var idField = document.getElementById(dataField);
+                    if (idField) {
+                        let fString = templateData[dataField];
+                        if (fString !== 'undefined' && fString !== 'null') {
+                            idField.innerText = fString;
+                        } else {
+                            idField.innerText = '';
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error("Error parsing update data:", err);
+            }
+
+            if (typeof runTemplateUpdate === "function") { 
+                runTemplateUpdate();
+            }
+        }
+
+        function play() {
+            console.log("SPX Play triggered");
+            if (typeof runAnimationIN === "function") { 
+                runAnimationIN();
+            }
+        }
+
+        function stop() {
+            console.log("SPX Stop triggered");
+            if (typeof runAnimationOUT === "function") { 
+                runAnimationOUT();
+            }
+        }
+
+        // Helper function: get element by ID
+        function e(elementID) {
+            return document.getElementById(elementID);
+        }
+
+        // Active animation reference to handle interruptions
+        let activeAnimation = null;
+        let isShown = false;
+
+        // Apply template updates when data fields change
+        function runTemplateUpdate() {
+            const imgElement = e('displayImage');
+            
+            // 1. Get raw values from hidden divs
+            const rawImgPath = e('f0').innerText.trim();
+            const fitStyle = e('f1').innerText.trim() || 'contain';
+            
+            console.log(`Updating Template. Image Path: ${rawImgPath}, Fit Style: ${fitStyle}`);
+
+            // 2. Resolve image path (ensure it handles absolute paths correctly)
+            if (rawImgPath && rawImgPath !== 'none' && rawImgPath !== '') {
+                imgElement.src = rawImgPath;
+                imgElement.style.display = 'block';
+            } else {
+                imgElement.src = '';
+                imgElement.style.display = 'none';
+                imgElement.style.opacity = 0;
+                isShown = false;
+                return;
+            }
+
+            // 3. Set standard object-fit style
+            imgElement.style.objectFit = fitStyle;
+        }
+
+        // Play Intro Animation
+        function runAnimationIN() {
+            const imgElement = e('displayImage');
+            
+            // Check if image source is empty
+            if (!imgElement.src || imgElement.src === window.location.href) {
+                console.warn("No image source loaded. Intro animation skipped.");
+                return;
+            }
+
+            // Get parameters
+            const animationType = e('f2').innerText.trim() || 'fade';
+            const duration = parseInt(e('f3').innerText.trim()) || 500;
+
+            console.log(`Animating IN: Type = ${animationType}, Duration = ${duration}ms`);
+
+            // Cancel any active running animation
+            if (activeAnimation) {
+                activeAnimation.cancel();
+            }
+
+            imgElement.style.display = 'block';
+            isShown = true;
+
+            // Define keyframes based on user selection
+            let keyframes = [];
+            switch (animationType) {
+                case 'zoom':
+                    keyframes = [
+                        { opacity: 0, transform: 'scale(0.95)' },
+                        { opacity: 1, transform: 'scale(1)' }
+                    ];
+                    break;
+                case 'slide-up':
+                    keyframes = [
+                        { opacity: 0, transform: 'translateY(100px)' },
+                        { opacity: 1, transform: 'translateY(0)' }
+                    ];
+                    break;
+                case 'slide-down':
+                    keyframes = [
+                        { opacity: 0, transform: 'translateY(-100px)' },
+                        { opacity: 1, transform: 'translateY(0)' }
+                    ];
+                    break;
+                case 'none':
+                    imgElement.style.opacity = 1;
+                    imgElement.style.transform = 'none';
+                    return;
+                case 'fade':
+                default:
+                    keyframes = [
+                        { opacity: 0 },
+                        { opacity: 1 }
+                    ];
+                    break;
+            }
+
+            // Execute Web Animation
+            activeAnimation = imgElement.animate(keyframes, {
+                duration: duration,
+                easing: 'ease-out',
+                fill: 'forwards'
+            });
+
+            activeAnimation.onfinish = () => {
+                activeAnimation = null;
+            };
+        }
+
+        // Play Outro Animation
+        function runAnimationOUT() {
+            const imgElement = e('displayImage');
+
+            if (!isShown) {
+                console.warn("Image not visible. Outro animation skipped.");
+                return;
+            }
+
+            // Get parameters
+            const animationType = e('f2').innerText.trim() || 'fade';
+            const duration = parseInt(e('f3').innerText.trim()) || 500;
+
+            console.log(`Animating OUT: Type = ${animationType}, Duration = ${duration}ms`);
+
+            // Cancel any active running animation
+            if (activeAnimation) {
+                activeAnimation.cancel();
+            }
+
+            // Define keyframes to reverse the intro animation
+            let keyframes = [];
+            switch (animationType) {
+                case 'zoom':
+                    keyframes = [
+                        { opacity: 1, transform: 'scale(1)' },
+                        { opacity: 0, transform: 'scale(0.95)' }
+                    ];
+                    break;
+                case 'slide-up':
+                    keyframes = [
+                        { opacity: 1, transform: 'translateY(0)' },
+                        { opacity: 0, transform: 'translateY(100px)' }
+                    ];
+                    break;
+                case 'slide-down':
+                    keyframes = [
+                        { opacity: 1, transform: 'translateY(0)' },
+                        { opacity: 0, transform: 'translateY(-100px)' }
+                    ];
+                    break;
+                case 'none':
+                    imgElement.style.opacity = 0;
+                    imgElement.style.display = 'none';
+                    isShown = false;
+                    return;
+                case 'fade':
+                default:
+                    keyframes = [
+                        { opacity: 1 },
+                        { opacity: 0 }
+                    ];
+                    break;
+            }
+
+            // Execute Web Animation
+            activeAnimation = imgElement.animate(keyframes, {
+                duration: duration,
+                easing: 'ease-in',
+                fill: 'forwards'
+            });
+
+            activeAnimation.onfinish = () => {
+                imgElement.style.display = 'none';
+                isShown = false;
+                activeAnimation = null;
+            };
+        }
+
+        // SPX Graphics Template Metadata Definition
+        window.SPXGCTemplateDefinition = {
+            "description": "Fullscreen PNG Overlay (1920x1080)",
+            "playserver": "OVERLAY",
+            "playchannel": "1",
+            "playlayer": "15",
+            "webplayout": "5",
+            "out": "manual",
+            "dataformat": "json",
+            "uicolor": "2",
+            "DataFields": [
+                {
+                    "ftype" : "instruction",
+                    "value" : "Allows overlaying fullscreen PNG files (1920x1080) from /ASSETS/media directory."
+                },
+                {
+                    "field": "f0",
+                    "ftype": "filelist",
+                    "title": "Select Overlay File",
+                    "assetfolder" : "/media/" ,
+                    "extension" : "png",
+                    "value": "none"
+                },
+                {
+                    "field": "f1",
+                    "ftype": "dropdown",
+                    "title": "Image Fitting Style",
+                    "value": "contain",
+                    "items": [
+                        {"text": "Contain (Maintain Aspect Ratio)", "value": "contain"},
+                        {"text": "Cover (Crop to Fit 1920x1080)", "value": "cover"},
+                        {"text": "Fill (Stretch to Fullscreen)", "value": "fill"}
+                    ]
+                },
+                {
+                    "field": "f2",
+                    "ftype": "dropdown",
+                    "title": "Transition Animation",
+                    "value": "fade",
+                    "items": [
+                        {"text": "Fade In", "value": "fade"},
+                        {"text": "Zoom In & Fade", "value": "zoom"},
+                        {"text": "Slide Up", "value": "slide-up"},
+                        {"text": "Slide Down", "value": "slide-down"},
+                        {"text": "None", "value": "none"}
+                    ]
+                },
+                {
+                    "field": "f3",
+                    "ftype": "textfield",
+                    "title": "Transition Duration (ms)",
+                    "value": "500"
+                }
+            ]
+        };
+    </script>
+</head>
+<body>
+    <div class="SPXWindow">
+        <img id="displayImage" src="" alt="Fullscreen Overlay Image" />
+    </div>
+
+    <!-- Hidden elements where SPX controller injects the values -->
+    <div id="hiddenSpxData">
+        <div id="f0"></div>
+        <div id="f1"></div>
+        <div id="f2"></div>
+        <div id="f3"></div>
+    </div>
+</body>
+</html>
