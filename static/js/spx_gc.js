@@ -150,6 +150,9 @@ socket.on('SPXMessage2Controller', function (data) {
         // Rundown commands below
 
         case 'RundownLoad':
+            if (window.location.pathname.startsWith('/renderer')) {
+                return;
+            }
             window.location.href = '/gc/' + data.file
             break;
 

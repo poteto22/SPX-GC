@@ -80,6 +80,9 @@ DATAROOT/
 ASSETS/**
 !ASSETS/csv/csv-folder.md
 !ASSETS/excel/ticker-demo/basic-news-ticker.xlsx
+!ASSETS/fonts/**
+!ASSETS/media/**
+!ASSETS/templates/Nation/**
 # Add templates with:
 # git add ASSETS/templates/softpix/html/Template_Pack_1.4.0/** -f
 # git add ASSETS/templates/softpix/ograf/Template_Pack_1.4.0/** -f
@@ -94,4 +97,6 @@ ASSETS/**
 !ASSETS/ExtraFunctions/modules
 !ASSETS/ExtraFunctions/spx_internal_demo_functions.js
 
+.continue/
+.npm-cache/
 
