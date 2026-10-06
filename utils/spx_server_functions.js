@@ -539,6 +539,20 @@ module.exports = {
   }, // GetSubfolders
 
 
+  getProjectNames: async function () {
+    // Return list of all project folders in the dataroot folder
+    try {
+      let dataroot = this.getDatarootFolder();
+      if (!dataroot) return [];
+      let folders = await this.GetSubfolders(dataroot);
+      return Array.isArray(folders) ? folders : [];
+    } catch (error) {
+      logger.error('getProjectNames / Failed to get projects: ' + error);
+      return [];
+    }
+  }, // getProjectNames
+
+
   GetDataFiles: async function (FOLDERstr) {
     // return a list of all json files in the dataroot folder
     logger.debug("Getting json files from " + FOLDERstr + "...");

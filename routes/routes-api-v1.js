@@ -22,6 +22,7 @@ const spx = require('../utils/spx_server_functions.js');
 const xlsx = require('node-xlsx').default;
 const axios = require('axios')
 const PlayoutCCG = require('../utils/playout_casparCG.js');
+const PlayoutWEB = require('../utils/playout_webplayer.js');
 const { query } = require("../utils/logger");
 const spxAuth = require('../utils/spx_auth.js');
 let apiCache = [] // used to cache [undocumented] API calls
@@ -123,59 +124,51 @@ router.get('/', function (req, res) {
 						"vers": "1.0",
 						"method": "GET",
 						"param": "/api/v1/rundown/focusFirst",
-						"info": "Move focus to the first item on the rundown.",
-						"active": false,
+						"info": "Move focus to the first item on the rundown."
 					},
 					{
 						"vers": "1.0",
 						"method": "GET",
 						"param": "/api/v1/rundown/focusLast",
-						"info": "Move focus to the last item on the rundown.",
-						"active": false,
+						"info": "Move focus to the last item on the rundown."
 					},
 					{
 						"vers": "1.0",
 						"method": "GET",
 						"param": "/api/v1/rundown/focusByID/1234567890",
-						"info": "Move focus by ID on the rundown.",
-						"active": false,
+						"info": "Move focus by ID on the rundown."
 					},
 					{
 						"vers": "1.0",
 						"method": "GET",
 						"param": "/api/v1/item/play/1234567890",
-						"info": "Start item by ID on the active rundown.",
-						"active": false,
+						"info": "Start item by ID on the active rundown."
 					},
 
 					{
 						"vers": "1.0",
 						"method": "GET",
 						"param": "/api/v1/item/continue/1234567890",
-						"info": "Continue to item by ID on the active rundown. Notice this needs support from the template itself and does not work as play or stop.",
-						"active": false,
+						"info": "Continue to item by ID on the active rundown. Notice this needs support from the template itself and does not work as play or stop."
 					},
 
 					{
 						"vers": "1.0",
 						"method": "GET",
 						"param": "/api/v1/item/stop/1234567890",
-						"info": "Stop item by ID on the active rundown.",
-						"active": false,
+						"info": "Stop item by ID on the active rundown."
 					},
 					{
 						"vers": "v1.0.12",
 						"method": "GET",
 						"param": "/api/v1/invokeTemplateFunction?playserver=OVERLAY&playchannel=1&playlayer=19&webplayout=19&function=myCustomTemplateFunction&params=Hello%20World",
-						"info": "Uses an invoke handler to call a function in a template. See required parameters in the example call above. JSON objects can be passed as params by urlEncoding stringified JSON. Search SPX Knowledge Base for more info with keyword <code>invoke</code>.",
-						"active": false,
+						"info": "Uses an invoke handler to call a function in a template. See required parameters in the example call above. JSON objects can be passed as params by urlEncoding stringified JSON. Search SPX Knowledge Base for more info with keyword <code>invoke</code>."
 					},
 					{
 						"vers": "v1.3.0",
 						"method": "GET",
 						"param": "/api/v1/invokeExtensionFunction?function=sendCmd&params=incrementNumber",
-						"info": "Uses SPX's messaging system to call a function in an extension. JSON objects can be passed as params by urlEncoding stringified JSON. The extension will need to implement SPX's messaging system, search SPX Knowledge Base for more info with keyword <code>invokeExtensionFunction</code>.",
-						"active": false,
+						"info": "Uses SPX's messaging system to call a function in an extension. JSON objects can be passed as params by urlEncoding stringified JSON. The extension will need to implement SPX's messaging system, search SPX Knowledge Base for more info with keyword <code>invokeExtensionFunction</code>."
 					},
 
 				]
@@ -189,14 +182,12 @@ router.get('/', function (req, res) {
 					{
 						"vers": "v1.0.12, v.1.3.2",
 						"method": "POST",
-						"active": false,
 						"param": "/api/v1/directplayout",
 						"info": "Populate template and execute a play/continue/stop -command to it. Please note the optional <code>updateRundownItem</code> property. <code>updateRundownItemitemID</code> is an optional object for forcing UI updates and persisting to defined rundown file. <b>Please note: special charaters in values does not work at the moment!</b> Post request body example as JSON:",
 						"code": { casparServer: "OVERLAY", casparChannel: "1", casparLayer: "20", webplayoutLayer: "20", relativeTemplatePath: "/vendor/pack/template.html", out: "manual", DataFields: [{ field: "f0", value: "Firstname" }, { field: "f1", value: "Lastname" }], command: "play", updateRundownItem: { updateUI: true, itemID: "myItemID", persist: true, "project": "myFirstProject", "rundown": "myFirstRundown" } }
 					},
 					{
 						"vers": "v1.1.0",
-						"active": false,
 						"method": "GET",
 						"param": "/api/v1/controlRundownItemByID?file=MyProject/FirstRundown&item=1234567890&command=play",
 						"info": "Play / stop an item from a known rundown. (Remember you can rename rundown items from SPX GUI)"
@@ -204,42 +195,36 @@ router.get('/', function (req, res) {
 					{
 						"vers": "v1.1.1",
 						"method": "GET",
-						"active": false,
 						"param": "/api/v1/getprojects",
 						"info": "Returns projects as an array of strings."
 					},
 					{
 						"vers": "v1.1.1",
 						"method": "GET",
-						"active": false,
 						"param": "/api/v1/getrundowns?project=MyProject",
 						"info": "Returns rundown names of a given project as an array of strings."
 					},
 					{
 						"vers": "v1.3.0",
 						"method": "GET",
-						"active": false,
 						"param": "/api/v1/allrundowns",
 						"info": "Returns all projects and rundowns"
 					},
 					{
 						"vers": "v1.1.1",
 						"method": "GET",
-						"active": false,
 						"param": "/api/v1/rundown/get",
 						"info": "Returns current rundown as json. "
 					},
 					{
 						"vers": "v1.3.0",
 						"method": "GET",
-						"active": false,
 						"param": "/api/v1/rundown/json?project=MyProject&rundown=FirstRundown",
 						"info": "Returns content of a specific rundown as json data."
 					},
 					{
 						"vers": "v1.3.0",
 						"method": "POST",
-						"active": false,
 						"param": "/api/v1/rundown/json",
 						"info": "Creates or updates a rundown file. This can be used for example with application extensions. POST <code>body:content</code> must contain valid rundown JSON data, otherwise SPX controller may not be able to read it. For more info search SPX Knowledge Base with keyword <code>api rundown/json</code>",
 						"code": { project: "myProjectName", file: "newRundown.json", content: { comment: "Playlist generated by MyApp", templates: [{ "description": "First template", "playserver": "OVERLAY", "etc": "..." }, { "description": "Second template", "playserver": "OVERLAY", "etc": "..." }] } }
@@ -247,7 +232,6 @@ router.get('/', function (req, res) {
 					{
 						"vers": "v1.1.1",
 						"method": "GET",
-						"active": false,
 						"param": "/api/v1/getlayerstate",
 						"info": "Returns current memory state of web-playout layers of the server (not UI). Please note, if API commands are used to load templates, this may not return them as expected!"
 					},
@@ -255,14 +239,12 @@ router.get('/', function (req, res) {
 					{
 						"vers": "v1.1.3",
 						"method": "GET",
-						"active": false,
 						"param": "/api/v1/gettemplates?project=MyProject",
 						"info": "Returns templates and their settings from a given project."
 					},
 					{
 						"vers": "v1.3.0",
 						"method": "GET",
-						"active": false,
 						"param": "/api/v1/executeScript?file=win-open-calculator.bat",
 						"info": "Execute a shell script/batch file in <code>ASSETS/scripts</code> folder using a shell associated with a given file extension."
 					},
@@ -270,14 +252,12 @@ router.get('/', function (req, res) {
 					{
 						"vers": "v1.3.0",
 						"method": "GET",
-						"active": false,
 						"param": "/api/v1/getFileList?assetsfolder=excel",
 						"info": "Returns an array of filenames fround in a given subfolder of ASSETS, such as <code>excel</code>."
 					},
 					{
 						"vers": "v1.3.0",
 						"method": "POST",
-						"active": false,
 						"param": "/api/v1/saveCustomJSON",
 						"info": "Creates or updates a JSON file in ASSETS/json folder. This can be used for persisting arbitrary data to a JSON file. The <code>content</code> property of the below example gets saved to <code>ASSETS/json/todoApp/myTodo.json</code>. Note the subfolder property is optional.",
 						"code": { subfolder: "todoApp", filename: "myData.json", content: { note: "Get these done by the end of month", items: [{ "task": "Grow a beard", "done": false }, { "task": "Get a haircut", "done": true }] } }
@@ -618,114 +598,516 @@ router.get('/rundown/focusPrevious/', spxAuth.CheckAPIKey, async (req, res) => {
 
 
 router.get('/invokeTemplateFunction/', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		let dataOut = {
+			spxcmd: 'invokeFunction',
+			invoke: req.query.function || '',
+			params: req.query.params || '',
+			webplayout: req.query.webplayout || '1',
+			playserver: req.query.playserver || '-',
+			playchannel: req.query.playchannel || '1',
+			playlayer: req.query.playlayer || '1'
+		};
+		if (dataOut.webplayout && dataOut.webplayout !== '-') {
+			PlayoutWEB.webPlayoutController(dataOut);
+		}
+		if (dataOut.playserver && dataOut.playserver !== '-' && spx.CCGServersConfigured) {
+			dataOut.command = "INVOKE";
+			PlayoutCCG.playoutController(dataOut);
+		}
+		return res.status(200).json({ status: 200, message: 'OK', info: 'Invoked template function.', data: dataOut });
+	} catch (error) {
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end invokeTemplateFunction
 
 
 router.get('/invokeExtensionFunction/', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		let dataOut = {
+			function: req.query.function || '',
+			params: req.query.params || ''
+		};
+		io.emit('SPXMessage2Extension', dataOut);
+		return res.status(200).json({ status: 200, message: 'OK', info: 'Invoked extension function.', data: dataOut });
+	} catch (error) {
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end invokeExtensionFunction
 
 
 router.get('/rundown/focusFirst/', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	let dataOut = {};
+	dataOut.info = ack2;
+	dataOut.status = 200;
+	dataOut.message = 'OK';
+	dataOut.APIcmd = 'RundownFocusFirst';
+	dataOut.apikey = req.query.apikey || '';
+	io.emit('SPXMessage2Controller', dataOut);
+	res.status(200).json(dataOut);
 }); // end focusFirst
 
 
 router.get('/rundown/focusLast/', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	let dataOut = {};
+	dataOut.info = ack2;
+	dataOut.status = 200;
+	dataOut.message = 'OK';
+	dataOut.APIcmd = 'RundownFocusLast';
+	dataOut.apikey = req.query.apikey || '';
+	io.emit('SPXMessage2Controller', dataOut);
+	res.status(200).json(dataOut);
 }); // end focusLast
 
 
 router.get('/rundown/focusByID/:id', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	let dataOut = {};
+	dataOut.info = ack2;
+	dataOut.status = 200;
+	dataOut.message = 'OK';
+	dataOut.APIcmd = 'RundownFocusByID';
+	dataOut.itemID = req.params.id;
+	dataOut.apikey = req.query.apikey || '';
+	io.emit('SPXMessage2Controller', dataOut);
+	res.status(200).json(dataOut);
 }); // end focusByID
 
 
 router.get('/item/play/:id', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	let dataOut = {};
+	dataOut.info = ack2;
+	dataOut.status = 200;
+	dataOut.message = 'OK';
+	dataOut.APIcmd = 'ItemPlayID';
+	dataOut.itemID = req.params.id;
+	dataOut.apikey = req.query.apikey || '';
+	io.emit('SPXMessage2Controller', dataOut);
+	res.status(200).json(dataOut);
 });  // end item play by ID
  
 
 router.get('/item/continue/:id', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	let dataOut = {};
+	dataOut.info = ack2;
+	dataOut.status = 200;
+	dataOut.message = 'OK';
+	dataOut.APIcmd = 'ItemContinueID';
+	dataOut.itemID = req.params.id;
+	dataOut.apikey = req.query.apikey || '';
+	io.emit('SPXMessage2Controller', dataOut);
+	res.status(200).json(dataOut);
 }); // end item continue by ID
 
 
 router.get('/item/stop/:id', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	let dataOut = {};
+	dataOut.info = ack2;
+	dataOut.status = 200;
+	dataOut.message = 'OK';
+	dataOut.APIcmd = 'ItemStopID';
+	dataOut.itemID = req.params.id;
+	dataOut.apikey = req.query.apikey || '';
+	io.emit('SPXMessage2Controller', dataOut);
+	res.status(200).json(dataOut);
 }); // end item stop by ID
 
 
 // SERVER API ----------------------------------------------------------------------------------
 
-router.post('/directplayout', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
-}); // end directplayout
+router.post('/directplayout', spxAuth.CheckAPIKey, handleDirectPlayout);
+router.get('/directplayout', spxAuth.CheckAPIKey, handleDirectPlayout);
 
+async function handleDirectPlayout(req, res) {
+	try {
+		let body = req.body || {};
+		let query = req.query || {};
 
-router.get('/directplayout', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
-}); // end directplayout
+		let command = body.command || query.command || 'play';
+		let relpath = body.relativeTemplatePath || body.relpath || query.relativeTemplatePath || query.relpath || '';
+		let playserver = body.casparServer || body.playserver || query.casparServer || query.playserver || '-';
+		let playchannel = body.casparChannel || body.playchannel || query.casparChannel || query.playchannel || '1';
+		let playlayer = body.casparLayer || body.playlayer || query.casparLayer || query.playlayer || '1';
+		let webplayout = body.webplayoutLayer || body.webplayout || query.webplayoutLayer || query.webplayout || '-';
+		let out = body.out || query.out || 'manual';
+		let fields = body.DataFields || body.fields || [];
+
+		if (typeof fields === 'string') {
+			try { fields = JSON.parse(fields); } catch (e) { fields = []; }
+		}
+
+		let relpathCCG = relpath ? relpath.split('.htm')[0] : '';
+
+		let dataOut = {
+			command: command,
+			relpath: relpath,
+			relpathCCG: relpathCCG,
+			playserver: playserver,
+			playchannel: playchannel,
+			playlayer: playlayer,
+			webplayout: webplayout,
+			out: out,
+			fields: fields,
+			prepopulated: "true",
+			referrer: "directplayout"
+		};
+
+		// Web playout execution
+		if (webplayout && webplayout !== '-') {
+			switch (command) {
+				case 'play':
+					dataOut.spxcmd = 'playTemplate';
+					break;
+				case 'stop':
+					dataOut.spxcmd = 'stopTemplate';
+					break;
+				case 'next':
+				case 'continue':
+					dataOut.spxcmd = 'nextTemplate';
+					break;
+				case 'update':
+					dataOut.spxcmd = 'updateTemplate';
+					break;
+				default:
+					dataOut.spxcmd = 'playTemplate';
+			}
+			PlayoutWEB.webPlayoutController(dataOut);
+		}
+
+		// CasparCG execution
+		if (playserver && playserver !== '-' && spx.CCGServersConfigured) {
+			let ccgData = { ...dataOut };
+			switch (command) {
+				case 'play': ccgData.command = 'ADD'; break;
+				case 'stop': ccgData.command = 'STOP'; break;
+				case 'next':
+				case 'continue': ccgData.command = 'NEXT'; break;
+				case 'update': ccgData.command = 'UPDATE'; break;
+			}
+			PlayoutCCG.playoutController(ccgData);
+		}
+
+		// Handle autostop if out is numeric (in ms)
+		let numericOut = parseInt(out);
+		if (command === 'play' && !isNaN(numericOut) && numericOut > 0) {
+			setTimeout(() => {
+				let stopData = { ...dataOut, command: 'stop', spxcmd: 'stopTemplate' };
+				if (webplayout && webplayout !== '-') {
+					PlayoutWEB.webPlayoutController(stopData);
+				}
+				if (playserver && playserver !== '-' && spx.CCGServersConfigured) {
+					stopData.command = 'STOP';
+					PlayoutCCG.playoutController(stopData);
+				}
+			}, numericOut);
+		}
+
+		// UI update if requested
+		if (body.updateRundownItem?.updateUI) {
+			io.emit('SPXMessage2Client', {
+				spxcmd: 'updateRundownItem',
+				itemID: body.updateRundownItem.itemID,
+				relpath: relpath,
+				command: command
+			});
+		}
+
+		return res.status(200).json({
+			status: 200,
+			message: 'OK',
+			info: 'Directplayout command executed.',
+			data: dataOut
+		});
+	} catch (error) {
+		logger.error('Error in directplayout API: ' + error);
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
+}
 
 
 router.get('/getprojects', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		let projects = await spx.getProjectNames();
+		return res.status(200).json(projects);
+	} catch (error) {
+		logger.error('Error in getprojects API: ' + (error.message || error));
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end getprojects
 
 
 router.get('/allrundowns', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		let projects = await spx.getProjectNames();
+		let result = [];
+		for (let project of projects) {
+			let projectDataFolder = path.join(spx.getDatarootFolder(), project, 'data');
+			let rundowns = [];
+			if (fs.existsSync(projectDataFolder)) {
+				rundowns = fs.readdirSync(projectDataFolder)
+					.filter(f => f.toLowerCase().endsWith('.json'))
+					.map(f => f.replace(/\.json$/i, ''));
+			}
+			result.push({ project: project, rundowns: rundowns });
+		}
+		return res.status(200).json(result);
+	} catch (error) {
+		logger.error('Error in allrundowns API: ' + (error.message || error));
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end allrundowns
 
 
 router.get('/getrundowns', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		let project = req.query.project || '';
+		if (!project) {
+			return res.status(400).json({ status: 400, error: 'Project parameter is required' });
+		}
+		let projectDataFolder = path.join(spx.getDatarootFolder(), project, 'data');
+		if (!fs.existsSync(projectDataFolder)) {
+			return res.status(404).json({ status: 404, error: 'Project data folder not found' });
+		}
+		let files = fs.readdirSync(projectDataFolder)
+			.filter(f => f.toLowerCase().endsWith('.json'))
+			.map(f => f.replace(/\.json$/i, ''));
+		return res.status(200).json(files);
+	} catch (error) {
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end getrundowns
 
 
 router.get('/gettemplates', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		let project = req.query.project || '';
+		if (!project) {
+			return res.status(400).json({ status: 400, error: 'Project parameter is required' });
+		}
+		let profileFile = path.join(spx.getDatarootFolder(), project, 'profile.json');
+		if (!fs.existsSync(profileFile)) {
+			return res.status(404).json({ status: 404, error: 'Profile file not found for project: ' + project });
+		}
+		let profileData = await spx.GetJsonData(profileFile);
+		return res.status(200).json(profileData.templates || []);
+	} catch (error) {
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end gettemplates
 
 
 router.get('/getlayerstate', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		let activeTemplates = [];
+		if (global.rundownData && global.rundownData.templates) {
+			activeTemplates = global.rundownData.templates.filter(t => t.onair === 'true');
+		}
+		return res.status(200).json({ status: 200, onairTemplates: activeTemplates });
+	} catch (error) {
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end getlayerstate
 
 
 router.get('/executeScript', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		let scriptFile = req.query.file || '';
+		if (!scriptFile) {
+			return res.status(400).json({ status: 400, error: 'Script file parameter missing' });
+		}
+		let scriptPath = path.join(spx.getStartUpFolder(), 'ASSETS', 'scripts', scriptFile);
+		if (!fs.existsSync(scriptPath)) {
+			return res.status(404).json({ status: 404, error: 'Script file not found: ' + scriptFile });
+		}
+		let cmd = `"${scriptPath}"`;
+		require('child_process').exec(cmd, (error, stdout, stderr) => {
+			if (error) {
+				return res.status(500).json({ status: 500, error: error.message, stderr: stderr });
+			}
+			return res.status(200).json({ status: 200, message: 'Script executed successfully', stdout: stdout });
+		});
+	} catch (error) {
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end executeScript file
 
 
 router.get('/getFileList', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		let folder = req.query.assetsfolder || 'excel';
+		let targetFolder = path.join(spx.getStartUpFolder(), 'ASSETS', folder);
+		if (!fs.existsSync(targetFolder)) {
+			return res.status(404).json({ status: 404, error: 'Assets folder not found: ' + folder });
+		}
+		let files = fs.readdirSync(targetFolder);
+		return res.status(200).json(files);
+	} catch (error) {
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end getFileList
 
 
 router.post('/saveCustomJSON', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		let subfolder = req.body.subfolder || '';
+		let filename = req.body.filename || '';
+		let content = req.body.content;
+
+		if (!filename || !content) {
+			return res.status(400).json({ status: 400, error: 'filename and content are required' });
+		}
+
+		let targetDir = path.join(spx.getStartUpFolder(), 'ASSETS', 'json', subfolder);
+		if (!fs.existsSync(targetDir)) {
+			fs.mkdirSync(targetDir, { recursive: true });
+		}
+
+		let targetFile = path.join(targetDir, filename);
+		await spx.writeFile(targetFile, content);
+		return res.status(200).json({ status: 200, message: 'Custom JSON saved successfully', file: targetFile });
+	} catch (error) {
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end saveCustomJSON
 
 
 router.get('/controlRundownItemByID', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		let file = req.query.file || '';
+		let itemID = req.query.item || '';
+		let command = req.query.command || 'play';
+
+		if (!file || !itemID) {
+			return res.status(400).json({ status: 400, error: 'file and item parameters are required' });
+		}
+
+		let project = file.split('/')[0];
+		let rundown = file.split('/')[1];
+		let RundownFile = path.resolve(spx.getDatarootFolder(), project, 'data', rundown + '.json');
+
+		if (!fs.existsSync(RundownFile)) {
+			return res.status(404).json({ status: 404, error: 'Rundown file not found: ' + file });
+		}
+
+		let RundownData = await spx.GetJsonData(RundownFile);
+		let item = RundownData.templates?.find(t => t.itemID === itemID);
+
+		if (!item) {
+			return res.status(404).json({ status: 404, error: 'Item ID ' + itemID + ' not found in rundown' });
+		}
+
+		let dataOut = {
+			command: command,
+			relpath: item.relpath,
+			relpathCCG: item.relpath ? item.relpath.split('.htm')[0] : '',
+			playserver: item.playserver || '-',
+			playchannel: item.playchannel || '1',
+			playlayer: item.playlayer || '1',
+			webplayout: item.webplayout || '1',
+			out: item.out || 'manual',
+			fields: item.DataFields || [],
+			prepopulated: "true",
+			referrer: "controlRundownItemByID"
+		};
+
+		if (dataOut.webplayout && dataOut.webplayout !== '-') {
+			switch (command) {
+				case 'play': dataOut.spxcmd = 'playTemplate'; break;
+				case 'stop': dataOut.spxcmd = 'stopTemplate'; break;
+				case 'next':
+				case 'continue': dataOut.spxcmd = 'nextTemplate'; break;
+				case 'update': dataOut.spxcmd = 'updateTemplate'; break;
+			}
+			PlayoutWEB.webPlayoutController(dataOut);
+		}
+
+		if (dataOut.playserver && dataOut.playserver !== '-' && spx.CCGServersConfigured) {
+			let ccgData = { ...dataOut };
+			switch (command) {
+				case 'play': ccgData.command = 'ADD'; break;
+				case 'stop': ccgData.command = 'STOP'; break;
+				case 'next': ccgData.command = 'NEXT'; break;
+				case 'update': ccgData.command = 'UPDATE'; break;
+			}
+			PlayoutCCG.playoutController(ccgData);
+		}
+
+		io.emit('SPXMessage2Client', {
+			spxcmd: 'updateRundownItem',
+			itemID: itemID,
+			relpath: item.relpath,
+			command: command
+		});
+
+		return res.status(200).json({ status: 200, message: 'Item controlled successfully', itemID: itemID, command: command });
+	} catch (error) {
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end controlRundownItemByID
 
 
 router.get('/rundown/get', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		if (!global.rundownData || Object.keys(global.rundownData).length === 0) {
+			return res.status(404).json({ status: 404, message: 'No active rundown loaded in memory' });
+		}
+		return res.status(200).json(global.rundownData);
+	} catch (error) {
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end get current rundown as JSON
 
 
 router.get('/rundown/json', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		let project = req.query.project || '';
+		let rundown = req.query.rundown || '';
+		if (!project || !rundown) {
+			return res.status(400).json({ status: 400, error: 'project and rundown parameters required' });
+		}
+		let file = path.resolve(spx.getDatarootFolder(), project, 'data', rundown + '.json');
+		if (!fs.existsSync(file)) {
+			return res.status(404).json({ status: 404, error: 'Rundown file not found: ' + project + '/' + rundown });
+		}
+		let data = await spx.GetJsonData(file);
+		return res.status(200).json(data);
+	} catch (error) {
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end get specific rundown as JSON
 
 
 router.post('/rundown/json', spxAuth.CheckAPIKey, async (req, res) => {
-	res.status(501).json(notInSolo);
+	try {
+		let project = req.body.project || '';
+		let filename = req.body.file || req.body.rundown || '';
+		let content = req.body.content;
+
+		if (!project || !filename || !content) {
+			return res.status(400).json({ status: 400, error: 'project, file, and content parameters are required' });
+		}
+
+		if (!filename.toLowerCase().endsWith('.json')) {
+			filename += '.json';
+		}
+
+		let dataFolder = path.resolve(spx.getDatarootFolder(), project, 'data');
+		if (!fs.existsSync(dataFolder)) {
+			fs.mkdirSync(dataFolder, { recursive: true });
+		}
+
+		let targetFile = path.join(dataFolder, filename);
+		await spx.writeFile(targetFile, content);
+
+		io.emit('SPXMessage2Client', {
+			spxcmd: "showMessageSlider",
+			msg: "Rundown modified by API (" + filename + ")",
+			type: "info"
+		});
+
+		return res.status(200).json({ status: 200, message: 'Rundown saved successfully', file: targetFile });
+	} catch (error) {
+		return res.status(500).json({ status: 500, error: error.message || error });
+	}
 }); // end create or update rundown as JSON
 
 module.exports = router;
