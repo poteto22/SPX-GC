@@ -73,6 +73,7 @@ spx-content-repo.txt
 DATAROOT/
 !DATAROOT/MyFirstProject/
 !DATAROOT/MyFirstOGrafProject/
+!DATAROOT/Standard/
 
 
 # IGNORE SPX ASSETS
