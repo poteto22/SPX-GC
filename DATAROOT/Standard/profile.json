@@ -1,0 +1,597 @@
+{
+  "projectFormat": "SPX",
+  "warning": "Modifications done in the SPX will overwrite this file.",
+  "copyright": "(c) 2020- SPX Graphics (https://spxgraphics.com)",
+  "updated": "2026-10-08T08:18:16.849Z",
+  "templates": [
+    {
+      "DataFields": [
+        {
+          "field": "_headtext",
+          "ftype": "textfield",
+          "title": "Topbar Text",
+          "value": ""
+        },
+        {
+          "field": "_headtext_fontsize",
+          "ftype": "textfield",
+          "title": "Topbar Font Size (px)",
+          "value": "40"
+        },
+        {
+          "field": "_headtext_color",
+          "ftype": "textfield",
+          "title": "Topbar Font Color (โค้ดสี เช่น #ffffff)",
+          "value": "#ffffff"
+        },
+        {
+          "field": "_line1",
+          "ftype": "textfield",
+          "title": "Text Upper Line",
+          "value": ""
+        },
+        {
+          "field": "_line1_fontsize",
+          "ftype": "textfield",
+          "title": "Upper Line Font Size (px)",
+          "value": "65"
+        },
+        {
+          "field": "_line1_fontweight",
+          "ftype": "dropdown",
+          "title": "Upper Line Font Weight (ความหนา)",
+          "value": "black",
+          "items": [
+            {
+              "text": "Black (หนาสุด - 900)",
+              "value": "black"
+            },
+            {
+              "text": "Bold (หนา - 700)",
+              "value": "bold"
+            },
+            {
+              "text": "Medium (ปานกลาง - 500)",
+              "value": "medium"
+            },
+            {
+              "text": "Regular (ปกติ/บาง - 400)",
+              "value": "regular"
+            },
+            {
+              "text": "Light (บางพิเศษ - 300)",
+              "value": "light"
+            }
+          ]
+        },
+        {
+          "field": "_line1_color",
+          "ftype": "textfield",
+          "title": "Upper Line Font Color (โค้ดสี เช่น #000000)",
+          "value": "#000000"
+        },
+        {
+          "field": "_line2",
+          "ftype": "textfield",
+          "title": "Text Lower Line",
+          "value": ""
+        },
+        {
+          "field": "_line2_fontsize",
+          "ftype": "textfield",
+          "title": "Lower Line Font Size (px)",
+          "value": "45"
+        },
+        {
+          "field": "_line2_fontweight",
+          "ftype": "dropdown",
+          "title": "Lower Line Font Weight (ความหนา)",
+          "value": "bold",
+          "items": [
+            {
+              "text": "Bold (หนา - 700)",
+              "value": "bold"
+            },
+            {
+              "text": "Black (หนาสุด - 900)",
+              "value": "black"
+            },
+            {
+              "text": "Medium (ปานกลาง - 500)",
+              "value": "medium"
+            },
+            {
+              "text": "Regular (ปกติ/บาง - 400)",
+              "value": "regular"
+            },
+            {
+              "text": "Light (บางพิเศษ - 300)",
+              "value": "light"
+            }
+          ]
+        },
+        {
+          "field": "_line2_color",
+          "ftype": "textfield",
+          "title": "Lower Line Font Color (โค้ดสี เช่น #000000)",
+          "value": "#000000"
+        },
+        {
+          "field": "_mainbar",
+          "ftype": "filelist",
+          "title": "Main Bar",
+          "value": "",
+          "assetfolder": "media/bar",
+          "extension": ""
+        },
+        {
+          "field": "_headbar",
+          "ftype": "filelist",
+          "title": "Top Bar",
+          "value": "",
+          "assetfolder": "media/head",
+          "extension": ""
+        }
+      ],
+      "relpath": "/Nation/Bar-2-Line.html",
+      "description": "Bar 2 Line",
+      "playserver": "-",
+      "playchannel": "1",
+      "playlayer": "1",
+      "dataformat": "json",
+      "webplayout": "3",
+      "out": "manual",
+      "uicolor": "5",
+      "steps": "1"
+    },
+    {
+      "description": "บาร์ชื่อ 2 คน",
+      "playserver": "OVERLAY",
+      "playchannel": "1",
+      "playlayer": "1",
+      "webplayout": "3",
+      "steps": "1",
+      "out": "manual",
+      "uicolor": "4",
+      "dataformat": "json",
+      "DataFields": [
+        {
+          "field": "_headtext",
+          "ftype": "textfield",
+          "title": "Top Bar Text",
+          "value": ""
+        },
+        {
+          "field": "_headtext_fontsize",
+          "ftype": "textfield",
+          "title": "Top Bar Font Size (px)",
+          "value": "45"
+        },
+        {
+          "field": "_headtext_fontweight",
+          "ftype": "dropdown",
+          "title": "Top Bar Font Weight (ความหนา)",
+          "value": "bold",
+          "items": [
+            {
+              "text": "Bold (หนา - 700)",
+              "value": "bold"
+            },
+            {
+              "text": "Black (หนาสุด - 900)",
+              "value": "black"
+            },
+            {
+              "text": "Medium (ปานกลาง - 500)",
+              "value": "medium"
+            },
+            {
+              "text": "Regular (ปกติ/บาง - 400)",
+              "value": "regular"
+            },
+            {
+              "text": "Light (บางพิเศษ - 300)",
+              "value": "light"
+            }
+          ]
+        },
+        {
+          "field": "_headtext_color",
+          "ftype": "textfield",
+          "title": "Top Bar Font Color (โค้ดสี เช่น #ffffff)",
+          "value": "#ffffff"
+        },
+        {
+          "field": "_name1",
+          "ftype": "textfield",
+          "title": "Name Left",
+          "value": ""
+        },
+        {
+          "field": "_name1_fontsize",
+          "ftype": "textfield",
+          "title": "Name Left Font Size (px)",
+          "value": "65"
+        },
+        {
+          "field": "_name1_fontweight",
+          "ftype": "dropdown",
+          "title": "Name Left Font Weight (ความหนา)",
+          "value": "black",
+          "items": [
+            {
+              "text": "Black (หนาสุด - 900)",
+              "value": "black"
+            },
+            {
+              "text": "Bold (หนา - 700)",
+              "value": "bold"
+            },
+            {
+              "text": "Medium (ปานกลาง - 500)",
+              "value": "medium"
+            },
+            {
+              "text": "Regular (ปกติ/บาง - 400)",
+              "value": "regular"
+            },
+            {
+              "text": "Light (บางพิเศษ - 300)",
+              "value": "light"
+            }
+          ]
+        },
+        {
+          "field": "_name1_color",
+          "ftype": "textfield",
+          "title": "Name Left Font Color (โค้ดสี เช่น #000000)",
+          "value": "#000000"
+        },
+        {
+          "field": "_name2",
+          "ftype": "textfield",
+          "title": "Name Right",
+          "value": ""
+        },
+        {
+          "field": "_name2_fontsize",
+          "ftype": "textfield",
+          "title": "Name Right Font Size (px)",
+          "value": "65"
+        },
+        {
+          "field": "_name2_fontweight",
+          "ftype": "dropdown",
+          "title": "Name Right Font Weight (ความหนา)",
+          "value": "black",
+          "items": [
+            {
+              "text": "Black (หนาสุด - 900)",
+              "value": "black"
+            },
+            {
+              "text": "Bold (หนา - 700)",
+              "value": "bold"
+            },
+            {
+              "text": "Medium (ปานกลาง - 500)",
+              "value": "medium"
+            },
+            {
+              "text": "Regular (ปกติ/บาง - 400)",
+              "value": "regular"
+            },
+            {
+              "text": "Light (บางพิเศษ - 300)",
+              "value": "light"
+            }
+          ]
+        },
+        {
+          "field": "_name2_color",
+          "ftype": "textfield",
+          "title": "Name Right Font Color (โค้ดสี เช่น #000000)",
+          "value": "#000000"
+        },
+        {
+          "field": "_line2",
+          "ftype": "textfield",
+          "title": "Bottom Text",
+          "value": ""
+        },
+        {
+          "field": "_line2_fontsize",
+          "ftype": "textfield",
+          "title": "Bottom Text Font Size (px)",
+          "value": "40"
+        },
+        {
+          "field": "_line2_fontweight",
+          "ftype": "dropdown",
+          "title": "Bottom Text Font Weight (ความหนา)",
+          "value": "bold",
+          "items": [
+            {
+              "text": "Bold (หนา - 700)",
+              "value": "bold"
+            },
+            {
+              "text": "Black (หนาสุด - 900)",
+              "value": "black"
+            },
+            {
+              "text": "Medium (ปานกลาง - 500)",
+              "value": "medium"
+            },
+            {
+              "text": "Regular (ปกติ/บาง - 400)",
+              "value": "regular"
+            },
+            {
+              "text": "Light (บางพิเศษ - 300)",
+              "value": "light"
+            }
+          ]
+        },
+        {
+          "field": "_line2_color",
+          "ftype": "textfield",
+          "title": "Bottom Text Font Color (โค้ดสี เช่น #000000)",
+          "value": "#000000"
+        },
+        {
+          "field": "_headbar",
+          "ftype": "filelist",
+          "title": "Top Bar",
+          "value": "",
+          "assetfolder": "media/head",
+          "extension": ""
+        },
+        {
+          "field": "_mainbar",
+          "ftype": "filelist",
+          "title": "Bar Image",
+          "value": "",
+          "assetfolder": "media/bar",
+          "extension": ""
+        }
+      ],
+      "onair": "false",
+      "imported": "1791447492553",
+      "relpath": "/Nation/Bar-2-Name.html"
+    },
+    {
+      "description": "Fullscreen PNG Overlay (1920x1080)",
+      "playserver": "OVERLAY",
+      "playchannel": "1",
+      "playlayer": "5",
+      "webplayout": "5",
+      "out": "manual",
+      "dataformat": "json",
+      "uicolor": "2",
+      "DataFields": [
+        {
+          "ftype": "instruction",
+          "value": "Allows overlaying fullscreen PNG files (1920x1080) from /ASSETS/media directory."
+        },
+        {
+          "field": "f0",
+          "ftype": "filelist",
+          "title": "Select Overlay File",
+          "assetfolder": "/media/",
+          "extension": "png",
+          "value": "none"
+        },
+        {
+          "field": "f1",
+          "ftype": "dropdown",
+          "title": "Image Fitting Style",
+          "value": "contain",
+          "items": [
+            {
+              "text": "Contain (Maintain Aspect Ratio)",
+              "value": "contain"
+            },
+            {
+              "text": "Cover (Crop to Fit 1920x1080)",
+              "value": "cover"
+            },
+            {
+              "text": "Fill (Stretch to Fullscreen)",
+              "value": "fill"
+            }
+          ]
+        },
+        {
+          "field": "f2",
+          "ftype": "dropdown",
+          "title": "Transition Animation",
+          "value": "fade",
+          "items": [
+            {
+              "text": "Fade In",
+              "value": "fade"
+            },
+            {
+              "text": "Zoom In & Fade",
+              "value": "zoom"
+            },
+            {
+              "text": "Slide Up",
+              "value": "slide-up"
+            },
+            {
+              "text": "Slide Down",
+              "value": "slide-down"
+            },
+            {
+              "text": "None",
+              "value": "none"
+            }
+          ]
+        },
+        {
+          "field": "f3",
+          "ftype": "textfield",
+          "title": "Transition Duration (ms)",
+          "value": "500"
+        }
+      ],
+      "onair": "false",
+      "imported": "1791386414251",
+      "relpath": "/Nation/fullscreen_png.html"
+    },
+    {
+      "DataFields": [
+        {
+          "field": "_logo",
+          "ftype": "filelist",
+          "title": "Logo PNG",
+          "value": "",
+          "assetfolder": "media/images/logo",
+          "extension": ""
+        }
+      ],
+      "relpath": "/Nation/Logo-api.html",
+      "description": "",
+      "playserver": "-",
+      "playchannel": "1",
+      "playlayer": "2",
+      "dataformat": "json",
+      "webplayout": "1",
+      "out": "manual",
+      "uicolor": "3",
+      "steps": "1"
+    },
+    {
+      "description": "Nation Bar 4 (JSON Text & Bar Image Support)",
+      "playserver": "OVERLAY",
+      "playchannel": "1",
+      "playlayer": "1",
+      "webplayout": "3",
+      "steps": "1",
+      "out": "manual",
+      "uicolor": "6",
+      "dataformat": "json",
+      "DataFields": [
+        {
+          "field": "_json_url",
+          "ftype": "textfield",
+          "title": "JSON URL or Local Path (e.g. sample_topic.json)",
+          "value": "sample_topic.json"
+        },
+        {
+          "field": "_mainbar",
+          "ftype": "filelist",
+          "title": "lower third",
+          "value": "",
+          "assetfolder": "media/images/bar",
+          "extension": ""
+        },
+        {
+          "field": "_headbar",
+          "ftype": "filelist",
+          "title": "header bar",
+          "value": "",
+          "assetfolder": "media/images/head",
+          "extension": ""
+        },
+        {
+          "field": "_topic",
+          "ftype": "textfield",
+          "title": "Text Bar (or JSON key)",
+          "value": ""
+        },
+        {
+          "field": "_topic_fontsize",
+          "ftype": "textfield",
+          "title": "Topic Font Size (px)",
+          "value": "55"
+        },
+        {
+          "field": "_topic_fontweight",
+          "ftype": "dropdown",
+          "title": "Topic Font Weight (ความหนา)",
+          "value": "bold",
+          "items": [
+            {
+              "text": "Bold (หนา - 700)",
+              "value": "bold"
+            },
+            {
+              "text": "Black (หนาสุด - 900)",
+              "value": "black"
+            },
+            {
+              "text": "Medium (ปานกลาง - 500)",
+              "value": "medium"
+            },
+            {
+              "text": "Regular (ปกติ/บาง - 400)",
+              "value": "regular"
+            },
+            {
+              "text": "Light (บางพิเศษ - 300)",
+              "value": "light"
+            }
+          ]
+        },
+        {
+          "field": "_topic_color",
+          "ftype": "textfield",
+          "title": "Topic Font Color (โค้ดสี เช่น #ffffff)",
+          "value": "#ffffff"
+        },
+        {
+          "field": "_headtext",
+          "ftype": "textfield",
+          "title": "Text Header (or JSON key)",
+          "value": ""
+        },
+        {
+          "field": "_head_fontsize",
+          "ftype": "textfield",
+          "title": "Head Font Size (px)",
+          "value": "45"
+        },
+        {
+          "field": "_head_fontweight",
+          "ftype": "dropdown",
+          "title": "Head Font Weight (ความหนา)",
+          "value": "bold",
+          "items": [
+            {
+              "text": "Bold (หนา - 700)",
+              "value": "bold"
+            },
+            {
+              "text": "Black (หนาสุด - 900)",
+              "value": "black"
+            },
+            {
+              "text": "Medium (ปานกลาง - 500)",
+              "value": "medium"
+            },
+            {
+              "text": "Regular (ปกติ/บาง - 400)",
+              "value": "regular"
+            },
+            {
+              "text": "Light (บางพิเศษ - 300)",
+              "value": "light"
+            }
+          ]
+        },
+        {
+          "field": "_head_color",
+          "ftype": "textfield",
+          "title": "Head Font Color (โค้ดสี เช่น #ffffff)",
+          "value": "#ffffff"
+        }
+      ],
+      "onair": "false",
+      "imported": "1791447496849",
+      "relpath": "/Nation/New-bar4.html"
+    }
+  ]
+}

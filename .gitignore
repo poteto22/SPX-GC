@@ -55,7 +55,6 @@ DEF_*/**
 .Trashes
 .vscode/
 ZIP_TEMP/
-DATAROOT*
 .DS_Store
 pkg-builds/
 zip_builds/
