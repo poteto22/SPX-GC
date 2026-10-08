@@ -32,6 +32,63 @@
 
     <style>
       @font-face {
+        font-family: 'NotoSansThai-Black';
+        src: url('/fonts/NotoSansThai-Black.ttf') format('truetype'),
+             url('../../fonts/NotoSansThai-Black.ttf') format('truetype'),
+             url('./fonts/NotoSansThai-Black.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'Noto Sans Thai Black';
+        src: url('/fonts/NotoSansThai-Black.ttf') format('truetype'),
+             url('../../fonts/NotoSansThai-Black.ttf') format('truetype'),
+             url('./fonts/NotoSansThai-Black.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'NotoSansThai-Bold';
+        src: url('/fonts/NotoSansThai-Bold.ttf') format('truetype'),
+             url('../../fonts/NotoSansThai-Bold.ttf') format('truetype'),
+             url('./fonts/NotoSansThai-Bold.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'Noto Sans Thai Bold';
+        src: url('/fonts/NotoSansThai-Bold.ttf') format('truetype'),
+             url('../../fonts/NotoSansThai-Bold.ttf') format('truetype'),
+             url('./fonts/NotoSansThai-Bold.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'NotoSansThai-Medium';
+        src: local('Noto Sans Thai Medium'), local('Noto Sans Thai'), local('Sukhumvit Set'), local('Thonburi'), local('Leelawadee UI'), url('../../fonts/NotoSansThai-Bold.ttf') format('truetype');
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'NotoSansThai-Regular';
+        src: local('Noto Sans Thai Regular'), local('Noto Sans Thai'), local('Sukhumvit Set'), local('Thonburi'), local('Leelawadee UI'), url('../../fonts/NotoSansThai-Bold.ttf') format('truetype');
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'NotoSansThai-Light';
+        src: local('Noto Sans Thai Light'), local('Noto Sans Thai'), local('Sukhumvit Set'), local('Thonburi'), local('Leelawadee UI'), url('../../fonts/NotoSansThai-Bold.ttf') format('truetype');
+        font-weight: 300;
+        font-style: normal;
+      }
+
+      @font-face {
         font-family: 'Noto Sans Thai';
         src: url('/fonts/NotoSansThai-Bold.ttf') format('truetype'),
              url('../../fonts/NotoSansThai-Bold.ttf') format('truetype'),
@@ -40,8 +97,8 @@
         font-style: normal;
       }
 
-      #render, #render * {
-        font-family: 'Noto Sans Thai', sans-serif !important;
+      #render {
+        font-family: 'Noto Sans Thai', sans-serif;
       }
 
       body {
@@ -854,11 +911,9 @@
           }
           if (elem.domNode) {
             elem.domNode.style.fontSize = numSize + "px";
-            elem.domNode.style.fontWeight = "bold";
             const innerContent = elem.domNode.querySelector(".content");
             if (innerContent) {
               innerContent.style.fontSize = numSize + "px";
-              innerContent.style.fontWeight = "bold";
             }
           }
           if (typeof elem.squeeze === "function") elem.squeeze();
@@ -879,17 +934,124 @@
           }
           if (elem.domNode) {
             elem.domNode.style.fontSize = numSize + "px";
-            elem.domNode.style.fontWeight = "bold";
             const innerContent = elem.domNode.querySelector(".content");
             if (innerContent) {
               innerContent.style.fontSize = numSize + "px";
-              innerContent.style.fontWeight = "bold";
             }
           }
           if (typeof elem.squeeze === "function") elem.squeeze();
           if (typeof mainComposition !== "undefined" && typeof mainComposition.refreshRender === "function") {
             try { mainComposition.refreshRender(); } catch (e) {}
           }
+        }
+      }
+
+      function updateTextFontWeight(key, weight) {
+        if (weight === undefined || weight === null || weight === "") return;
+        let targetKey = key;
+        if (key === 'head' || key === 'headtext' || key === '_head') targetKey = '_headtext';
+        if (key === 'topic') targetKey = '_topic';
+
+        const elem = mainComposition.findElementByKey(targetKey) || mainComposition.findElementByKey(key);
+        if (!elem || "TEXT" !== elem.type) return;
+
+        const wStr = String(weight).toLowerCase().trim();
+        let numericWeight = "700";
+        let chosenFamily = "NotoSansThai-Bold";
+
+        if (wStr === "black" || wStr === "900" || wStr === "heavy" || wStr === "extrabold" || wStr === "800") {
+          numericWeight = "900";
+          chosenFamily = "NotoSansThai-Black";
+        } else if (wStr === "bold" || wStr === "700" || wStr === "600" || wStr === "semibold") {
+          numericWeight = "700";
+          chosenFamily = "NotoSansThai-Bold";
+        } else if (wStr === "medium" || wStr === "500") {
+          numericWeight = "500";
+          chosenFamily = "NotoSansThai-Medium";
+        } else if (wStr === "regular" || wStr === "normal" || wStr === "400") {
+          numericWeight = "400";
+          chosenFamily = "NotoSansThai-Regular";
+        } else if (wStr === "light" || wStr === "300" || wStr === "thin" || wStr === "200" || wStr === "100") {
+          numericWeight = "300";
+          chosenFamily = "NotoSansThai-Light";
+        } else {
+          const num = parseInt(wStr, 10);
+          if (!isNaN(num) && num <= 300) {
+            numericWeight = "300";
+            chosenFamily = "NotoSansThai-Light";
+          } else if (!isNaN(num) && num <= 400) {
+            numericWeight = "400";
+            chosenFamily = "NotoSansThai-Regular";
+          } else if (!isNaN(num) && num <= 500) {
+            numericWeight = "500";
+            chosenFamily = "NotoSansThai-Medium";
+          } else if (!isNaN(num) && num <= 700) {
+            numericWeight = "700";
+            chosenFamily = "NotoSansThai-Bold";
+          } else {
+            numericWeight = "900";
+            chosenFamily = "NotoSansThai-Black";
+          }
+        }
+
+        if (elem.style && elem.style.fontWeight) {
+          elem.style.fontWeight.value = numericWeight;
+        }
+        if (elem.style && elem.style.fontFamily) {
+          elem.style.fontFamily.value = chosenFamily;
+        }
+        if (elem.domNode) {
+          elem.domNode.style.fontWeight = numericWeight;
+          elem.domNode.style.fontFamily = '"' + chosenFamily + '"';
+          const innerContent = elem.domNode.querySelector(".content");
+          if (innerContent) {
+            innerContent.style.fontWeight = numericWeight;
+            innerContent.style.fontFamily = '"' + chosenFamily + '"';
+          }
+        }
+        if (typeof elem.squeeze === "function") elem.squeeze();
+        if (typeof mainComposition !== "undefined" && typeof mainComposition.refreshRender === "function") {
+          try { mainComposition.refreshRender(); } catch (e) {}
+        }
+      }
+
+      function updateTextColor(key, color) {
+        if (color === undefined || color === null || color === "") return;
+        let targetKey = key;
+        if (key === 'head' || key === 'headtext' || key === '_head') targetKey = '_headtext';
+        if (key === 'topic') targetKey = '_topic';
+
+        const elem = mainComposition.findElementByKey(targetKey) || mainComposition.findElementByKey(key);
+        if (!elem || "TEXT" !== elem.type) return;
+
+        let colorStr = String(color).trim();
+        if (/^[0-9a-fA-F]{3}$/.test(colorStr) || /^[0-9a-fA-F]{6}$/.test(colorStr) || /^[0-9a-fA-F]{8}$/.test(colorStr)) {
+          colorStr = "#" + colorStr;
+        }
+
+        try {
+          if (elem.style && elem.style.color) {
+            elem.style.color.value = colorStr;
+          }
+        } catch (err) {
+          console.error("Error setting color on " + key, err);
+        }
+
+        if (elem.domNode) {
+          elem.domNode.style.color = colorStr;
+          const innerContent = elem.domNode.querySelector(".content");
+          if (innerContent) {
+            innerContent.style.color = colorStr;
+          }
+          if (elem.domNode.children && elem.domNode.children[0]) {
+            const child = elem.domNode.children[0];
+            child.style.color = colorStr;
+            child.style.backgroundImage = "none";
+            child.style.webkitTextFillColor = "initial";
+          }
+        }
+        if (typeof mainComposition !== "undefined" && typeof mainComposition.refreshRender === "function") {
+          try { mainComposition.refreshRender(); } catch (e) {}
         }
       }
 
@@ -901,6 +1063,12 @@
         let headbarInputVal = dataObj["_headbar"] || dataObj["_hardbar"] || dataObj["headbar"] || dataObj["hardbar"] || "";
         let headFontSize = dataObj["_head_fontsize"] || dataObj["head_fontsize"] || "";
         let topicFontSize = dataObj["_topic_fontsize"] || dataObj["topic_fontsize"] || "";
+
+        let headFontWeight = dataObj["_head_fontweight"] || dataObj["head_fontweight"] || dataObj["_headtext_fontweight"] || "";
+        let topicFontWeight = dataObj["_topic_fontweight"] || dataObj["topic_fontweight"] || "";
+
+        let headColor = dataObj["_head_color"] || dataObj["head_color"] || dataObj["_headtext_color"] || "";
+        let topicColor = dataObj["_topic_color"] || dataObj["topic_color"] || "";
 
         let finalTopic = topicInputVal;
         let finalHeadtext = headInputVal;
@@ -965,6 +1133,10 @@
             // 5. Resolve font sizes from JSON
             if (jsonData["_head_fontsize"] !== undefined) headFontSize = jsonData["_head_fontsize"];
             if (jsonData["_topic_fontsize"] !== undefined) topicFontSize = jsonData["_topic_fontsize"];
+            if (jsonData["_head_fontweight"] !== undefined) headFontWeight = jsonData["_head_fontweight"];
+            if (jsonData["_topic_fontweight"] !== undefined) topicFontWeight = jsonData["_topic_fontweight"];
+            if (jsonData["_head_color"] !== undefined) headColor = jsonData["_head_color"];
+            if (jsonData["_topic_color"] !== undefined) topicColor = jsonData["_topic_color"];
 
             // 6. Resolve relative image paths if jsonUrl is HTTP/HTTPS (e.g. http://localhost:8080/mainbar)
             if (jsonUrl.startsWith("http://") || jsonUrl.startsWith("https://")) {
@@ -1000,6 +1172,10 @@
 
         if (headFontSize) setHeadFontSize(headFontSize);
         if (topicFontSize) setTopicFontSize(topicFontSize);
+        if (headFontWeight) updateTextFontWeight("_headtext", headFontWeight);
+        if (topicFontWeight) updateTextFontWeight("_topic", topicFontWeight);
+        if (headColor) updateTextColor("_headtext", headColor);
+        if (topicColor) updateTextColor("_topic", topicColor);
       }
 
       function update(data) {
@@ -1020,6 +1196,10 @@
 
               if (id === "_head_fontsize" || id === "head_fontsize" || id === "_head_size") setHeadFontSize(value);
               if (id === "_topic_fontsize" || id === "topic_fontsize" || id === "_topic_size") setTopicFontSize(value);
+              if (id === "_head_fontweight" || id === "head_fontweight" || id === "_headtext_fontweight") updateTextFontWeight("_headtext", value);
+              if (id === "_topic_fontweight" || id === "topic_fontweight") updateTextFontWeight("_topic", value);
+              if (id === "_head_color" || id === "head_color" || id === "_headtext_color") updateTextColor("_headtext", value);
+              if (id === "_topic_color" || id === "topic_color") updateTextColor("_topic", value);
 
               try {
                 loopic.fireUpdateItem(id, value, 0);
@@ -1116,7 +1296,7 @@
         "webplayout": "3",
         "steps": "1",
         "out": "manual",
-        "uicolor": "2",
+        "uicolor": "6",
         "dataformat": "json",
         "DataFields": [{
           "field": "_json_url",
@@ -1143,6 +1323,28 @@
           "title": "Text Bar (or JSON key)",
           "value": ""
         }, {
+          "field": "_topic_fontsize",
+          "ftype": "textfield",
+          "title": "Topic Font Size (px)",
+          "value": "55"
+        }, {
+          "field": "_topic_fontweight",
+          "ftype": "dropdown",
+          "title": "Topic Font Weight (ความหนา)",
+          "value": "bold",
+          "items": [
+            { "text": "Bold (หนา - 700)", "value": "bold" },
+            { "text": "Black (หนาสุด - 900)", "value": "black" },
+            { "text": "Medium (ปานกลาง - 500)", "value": "medium" },
+            { "text": "Regular (ปกติ/บาง - 400)", "value": "regular" },
+            { "text": "Light (บางพิเศษ - 300)", "value": "light" }
+          ]
+        }, {
+          "field": "_topic_color",
+          "ftype": "textfield",
+          "title": "Topic Font Color (โค้ดสี เช่น #ffffff)",
+          "value": "#ffffff"
+        }, {
           "field": "_headtext",
           "ftype": "textfield",
           "title": "Text Header (or JSON key)",
@@ -1153,10 +1355,22 @@
           "title": "Head Font Size (px)",
           "value": "45"
         }, {
-          "field": "_topic_fontsize",
+          "field": "_head_fontweight",
+          "ftype": "dropdown",
+          "title": "Head Font Weight (ความหนา)",
+          "value": "bold",
+          "items": [
+            { "text": "Bold (หนา - 700)", "value": "bold" },
+            { "text": "Black (หนาสุด - 900)", "value": "black" },
+            { "text": "Medium (ปานกลาง - 500)", "value": "medium" },
+            { "text": "Regular (ปกติ/บาง - 400)", "value": "regular" },
+            { "text": "Light (บางพิเศษ - 300)", "value": "light" }
+          ]
+        }, {
+          "field": "_head_color",
           "ftype": "textfield",
-          "title": "Topic Font Size (px)",
-          "value": "55"
+          "title": "Head Font Color (โค้ดสี เช่น #ffffff)",
+          "value": "#ffffff"
         }]
       };
     </script>
@@ -12869,6 +13083,25 @@
         },
 
         fireDefaultUpdateMiddleware(key, value) {
+          if (key === '_head_fontsize' || key === 'head_fontsize' || key === '_head_size') {
+            setHeadFontSize(value);
+            return;
+          }
+          if (key === '_topic_fontsize' || key === 'topic_fontsize' || key === '_topic_size') {
+            setTopicFontSize(value);
+            return;
+          }
+          if (key.endsWith("_fontweight") || key.endsWith("_weight")) {
+            const targetKey = key.replace(/(_fontweight|_weight)$/, "");
+            updateTextFontWeight(targetKey, value);
+            return;
+          }
+          if (key.endsWith("_color") || key.endsWith("_fontcolor") || key.endsWith("_textcolor")) {
+            const targetKey = key.replace(/(_fontcolor|_textcolor|_color)$/, "");
+            updateTextColor(targetKey, value);
+            return;
+          }
+
           let targetKey = key;
           if (key === 'mainbar' || key === 'bar') targetKey = '_mainbar';
           if (key === 'headbar' || key === 'hardbar' || key === '_hardbar') targetKey = '_headbar';
@@ -13016,7 +13249,14 @@
       }
 
       onReady(() => {
-        setInitialCompositionData(mainComposition)
+        setInitialCompositionData(mainComposition);
+        for (const k in loopic.templateData) {
+          const val = loopic.templateData[k];
+          if (k === '_head_fontsize' || k === 'head_fontsize' || k === '_head_size') setHeadFontSize(val);
+          else if (k === '_topic_fontsize' || k === 'topic_fontsize' || k === '_topic_size') setTopicFontSize(val);
+          else if (k.endsWith('_fontweight') || k.endsWith('_weight')) updateTextFontWeight(k.replace(/(_fontweight|_weight)$/, ''), val);
+          else if (k.endsWith('_color') || k.endsWith('_fontcolor') || k.endsWith('_textcolor')) updateTextColor(k.replace(/(_fontcolor|_textcolor|_color)$/, ''), val);
+        }
       })
 
       function fitToWindow() {

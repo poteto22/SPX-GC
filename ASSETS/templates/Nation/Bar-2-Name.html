@@ -45,6 +45,41 @@
         font-style: normal;
       }
 
+      @font-face {
+        font-family: 'NotoSansThai-Bold';
+        src: url('../../fonts/NotoSansThai-Bold.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'Noto Sans Thai Bold';
+        src: url('../../fonts/NotoSansThai-Bold.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'NotoSansThai-Medium';
+        src: local('Noto Sans Thai Medium'), local('Noto Sans Thai'), local('Sukhumvit Set'), local('Thonburi'), local('Leelawadee UI'), url('../../fonts/NotoSansThai-Bold.ttf') format('truetype');
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'NotoSansThai-Regular';
+        src: local('Noto Sans Thai Regular'), local('Noto Sans Thai'), local('Sukhumvit Set'), local('Thonburi'), local('Leelawadee UI'), url('../../fonts/NotoSansThai-Bold.ttf') format('truetype');
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'NotoSansThai-Light';
+        src: local('Noto Sans Thai Light'), local('Noto Sans Thai'), local('Sukhumvit Set'), local('Thonburi'), local('Leelawadee UI'), url('../../fonts/NotoSansThai-Bold.ttf') format('truetype');
+        font-weight: 300;
+        font-style: normal;
+      }
+
       body {
         margin: 0;
         padding: 0;
@@ -875,6 +910,94 @@
         }
       }
 
+      function updateTextFontWeight(key, weight) {
+        if (weight === undefined || weight === null || weight === "") return;
+        const elem = mainComposition.findElementByKey(key);
+        if (!elem || "TEXT" !== elem.type) return;
+
+        const wStr = String(weight).toLowerCase().trim();
+        let numericWeight = "900";
+        let chosenFamily = "NotoSansThai-Black";
+
+        if (wStr === "black" || wStr === "900" || wStr === "heavy" || wStr === "extrabold" || wStr === "800") {
+          numericWeight = "900";
+          chosenFamily = "NotoSansThai-Black";
+        } else if (wStr === "bold" || wStr === "700" || wStr === "600" || wStr === "semibold") {
+          numericWeight = "700";
+          chosenFamily = "NotoSansThai-Bold";
+        } else if (wStr === "medium" || wStr === "500") {
+          numericWeight = "500";
+          chosenFamily = "NotoSansThai-Medium";
+        } else if (wStr === "regular" || wStr === "normal" || wStr === "400") {
+          numericWeight = "400";
+          chosenFamily = "NotoSansThai-Regular";
+        } else if (wStr === "light" || wStr === "300" || wStr === "thin" || wStr === "200" || wStr === "100") {
+          numericWeight = "300";
+          chosenFamily = "NotoSansThai-Light";
+        } else {
+          const num = parseInt(wStr, 10);
+          if (!isNaN(num) && num <= 300) {
+            numericWeight = "300";
+            chosenFamily = "NotoSansThai-Light";
+          } else if (!isNaN(num) && num <= 400) {
+            numericWeight = "400";
+            chosenFamily = "NotoSansThai-Regular";
+          } else if (!isNaN(num) && num <= 500) {
+            numericWeight = "500";
+            chosenFamily = "NotoSansThai-Medium";
+          } else if (!isNaN(num) && num <= 700) {
+            numericWeight = "700";
+            chosenFamily = "NotoSansThai-Bold";
+          } else {
+            numericWeight = "900";
+            chosenFamily = "NotoSansThai-Black";
+          }
+        }
+
+        if (elem.style && elem.style.fontWeight) {
+          elem.style.fontWeight.value = numericWeight;
+        }
+        if (elem.style && elem.style.fontFamily) {
+          elem.style.fontFamily.value = chosenFamily;
+        }
+        if (elem.domNode) {
+          elem.domNode.style.fontWeight = numericWeight;
+          elem.domNode.style.fontFamily = '"' + chosenFamily + '"';
+        }
+        if (typeof elem.squeeze === "function") {
+          elem.squeeze();
+        }
+      }
+
+      function updateTextColor(key, color) {
+        if (color === undefined || color === null || color === "") return;
+        const elem = mainComposition.findElementByKey(key);
+        if (!elem || "TEXT" !== elem.type) return;
+
+        let colorStr = String(color).trim();
+        if (/^[0-9a-fA-F]{3}$/.test(colorStr) || /^[0-9a-fA-F]{6}$/.test(colorStr) || /^[0-9a-fA-F]{8}$/.test(colorStr)) {
+          colorStr = "#" + colorStr;
+        }
+
+        try {
+          if (elem.style && elem.style.color) {
+            elem.style.color.value = colorStr;
+          }
+        } catch (err) {
+          console.error("Error setting color on " + key, err);
+        }
+
+        if (elem.domNode) {
+          elem.domNode.style.color = colorStr;
+          if (elem.domNode.children && elem.domNode.children[0]) {
+            const child = elem.domNode.children[0];
+            child.style.color = colorStr;
+            child.style.backgroundImage = "none";
+            child.style.webkitTextFillColor = "initial";
+          }
+        }
+      }
+
       async function fetchApiData() {
         try {
           const res = await fetch("http://localhost:8080/bar2name");
@@ -894,10 +1017,30 @@
             const name2Size = data.name2_size || data.name2_fontsize || data.name2_fontSize || data._name2_fontsize || data._name2_size;
             const line2Size = data.line2_size || data.line2_fontsize || data.line2_fontSize || data._line2_fontsize || data._line2_size;
 
+            const headWeight = data.head_weight || data.head_fontweight || data._headtext_fontweight;
+            const name1Weight = data.name1_weight || data.name1_fontweight || data._name1_fontweight;
+            const name2Weight = data.name2_weight || data.name2_fontweight || data._name2_fontweight;
+            const line2Weight = data.line2_weight || data.line2_fontweight || data._line2_fontweight;
+
+            const headColor = data.head_color || data.head_fontcolor || data._headtext_color;
+            const name1Color = data.name1_color || data.name1_fontcolor || data._name1_color;
+            const name2Color = data.name2_color || data.name2_fontcolor || data._name2_color;
+            const line2Color = data.line2_color || data.line2_fontcolor || data._line2_color;
+
             if (headSize !== undefined) mapped._headtext_fontsize = headSize;
             if (name1Size !== undefined) mapped._name1_fontsize = name1Size;
             if (name2Size !== undefined) mapped._name2_fontsize = name2Size;
             if (line2Size !== undefined) mapped._line2_fontsize = line2Size;
+
+            if (headWeight !== undefined) mapped._headtext_fontweight = headWeight;
+            if (name1Weight !== undefined) mapped._name1_fontweight = name1Weight;
+            if (name2Weight !== undefined) mapped._name2_fontweight = name2Weight;
+            if (line2Weight !== undefined) mapped._line2_fontweight = line2Weight;
+
+            if (headColor !== undefined) mapped._headtext_color = headColor;
+            if (name1Color !== undefined) mapped._name1_color = name1Color;
+            if (name2Color !== undefined) mapped._name2_color = name2Color;
+            if (line2Color !== undefined) mapped._line2_color = line2Color;
 
             for (const k in mapped) {
               const val = mapped[k];
@@ -945,7 +1088,7 @@
         "webplayout": "3",
         "steps": "1",
         "out": "manual",
-        "uicolor": "2",
+        "uicolor": "4",
         "dataformat": "json",
         "DataFields": [{
           "field": "_headtext",
@@ -958,6 +1101,23 @@
           "title": "Top Bar Font Size (px)",
           "value": "45"
         }, {
+          "field": "_headtext_fontweight",
+          "ftype": "dropdown",
+          "title": "Top Bar Font Weight (ความหนา)",
+          "value": "bold",
+          "items": [
+            { "text": "Bold (หนา - 700)", "value": "bold" },
+            { "text": "Black (หนาสุด - 900)", "value": "black" },
+            { "text": "Medium (ปานกลาง - 500)", "value": "medium" },
+            { "text": "Regular (ปกติ/บาง - 400)", "value": "regular" },
+            { "text": "Light (บางพิเศษ - 300)", "value": "light" }
+          ]
+        }, {
+          "field": "_headtext_color",
+          "ftype": "textfield",
+          "title": "Top Bar Font Color (โค้ดสี เช่น #ffffff)",
+          "value": "#ffffff"
+        }, {
           "field": "_name1",
           "ftype": "textfield",
           "title": "Name Left",
@@ -967,6 +1127,23 @@
           "ftype": "textfield",
           "title": "Name Left Font Size (px)",
           "value": "65"
+        }, {
+          "field": "_name1_fontweight",
+          "ftype": "dropdown",
+          "title": "Name Left Font Weight (ความหนา)",
+          "value": "black",
+          "items": [
+            { "text": "Black (หนาสุด - 900)", "value": "black" },
+            { "text": "Bold (หนา - 700)", "value": "bold" },
+            { "text": "Medium (ปานกลาง - 500)", "value": "medium" },
+            { "text": "Regular (ปกติ/บาง - 400)", "value": "regular" },
+            { "text": "Light (บางพิเศษ - 300)", "value": "light" }
+          ]
+        }, {
+          "field": "_name1_color",
+          "ftype": "textfield",
+          "title": "Name Left Font Color (โค้ดสี เช่น #000000)",
+          "value": "#000000"
         }, {
           "field": "_name2",
           "ftype": "textfield",
@@ -978,6 +1155,23 @@
           "title": "Name Right Font Size (px)",
           "value": "65"
         }, {
+          "field": "_name2_fontweight",
+          "ftype": "dropdown",
+          "title": "Name Right Font Weight (ความหนา)",
+          "value": "black",
+          "items": [
+            { "text": "Black (หนาสุด - 900)", "value": "black" },
+            { "text": "Bold (หนา - 700)", "value": "bold" },
+            { "text": "Medium (ปานกลาง - 500)", "value": "medium" },
+            { "text": "Regular (ปกติ/บาง - 400)", "value": "regular" },
+            { "text": "Light (บางพิเศษ - 300)", "value": "light" }
+          ]
+        }, {
+          "field": "_name2_color",
+          "ftype": "textfield",
+          "title": "Name Right Font Color (โค้ดสี เช่น #000000)",
+          "value": "#000000"
+        }, {
           "field": "_line2",
           "ftype": "textfield",
           "title": "Bottom Text",
@@ -987,6 +1181,23 @@
           "ftype": "textfield",
           "title": "Bottom Text Font Size (px)",
           "value": "40"
+        }, {
+          "field": "_line2_fontweight",
+          "ftype": "dropdown",
+          "title": "Bottom Text Font Weight (ความหนา)",
+          "value": "bold",
+          "items": [
+            { "text": "Bold (หนา - 700)", "value": "bold" },
+            { "text": "Black (หนาสุด - 900)", "value": "black" },
+            { "text": "Medium (ปานกลาง - 500)", "value": "medium" },
+            { "text": "Regular (ปกติ/บาง - 400)", "value": "regular" },
+            { "text": "Light (บางพิเศษ - 300)", "value": "light" }
+          ]
+        }, {
+          "field": "_line2_color",
+          "ftype": "textfield",
+          "title": "Bottom Text Font Color (โค้ดสี เช่น #000000)",
+          "value": "#000000"
         }, {
           "field": "_headbar",
           "ftype": "filelist",
@@ -11778,7 +11989,7 @@
                 }),
                 fontFamily: new Property({
                   unit: "undefined",
-                  value: "NotoSansThai-Black",
+                  value: "NotoSansThai-Bold",
                   disableKeyframing: false,
                   keyframes: []
                 }),
@@ -11790,7 +12001,7 @@
                 }),
                 fontWeight: new Property({
                   unit: "undefined",
-                  value: "normal",
+                  value: "700",
                   disableKeyframing: false,
                   keyframes: []
                 }),
@@ -13535,6 +13746,16 @@
             updateTextFontSize(targetKey, value);
             return;
           }
+          if (key.endsWith("_fontweight") || key.endsWith("_weight")) {
+            const targetKey = key.replace(/(_fontweight|_weight)$/, "");
+            updateTextFontWeight(targetKey, value);
+            return;
+          }
+          if (key.endsWith("_color") || key.endsWith("_fontcolor") || key.endsWith("_textcolor")) {
+            const targetKey = key.replace(/(_fontcolor|_textcolor|_color)$/, "");
+            updateTextColor(targetKey, value);
+            return;
+          }
           const foundElement = mainComposition.findElementByKey(key)
 
           if (!foundElement) {
@@ -13556,6 +13777,8 @@
             if (typeof value === "object" && value !== null) {
               if (value.text !== undefined) foundElement.setContent(value.text);
               if (value.fontSize || value.size) updateTextFontSize(key, value.fontSize || value.size);
+              if (value.fontWeight || value.weight) updateTextFontWeight(key, value.fontWeight || value.weight);
+              if (value.color || value.fontColor) updateTextColor(key, value.color || value.fontColor);
             } else {
               foundElement.setContent(value)
             }
@@ -13641,7 +13864,16 @@
       }
 
       onReady(() => {
-        setInitialCompositionData(mainComposition)
+        setInitialCompositionData(mainComposition);
+        for (const k in loopic.templateData) {
+          if (k.endsWith("_fontsize") || k.endsWith("_size")) {
+            updateTextFontSize(k.replace(/(_fontsize|_size)$/, ""), loopic.templateData[k]);
+          } else if (k.endsWith("_fontweight") || k.endsWith("_weight")) {
+            updateTextFontWeight(k.replace(/(_fontweight|_weight)$/, ""), loopic.templateData[k]);
+          } else if (k.endsWith("_color") || k.endsWith("_fontcolor") || k.endsWith("_textcolor")) {
+            updateTextColor(k.replace(/(_fontcolor|_textcolor|_color)$/, ""), loopic.templateData[k]);
+          }
+        }
       })
 
       function fitToWindow() {
