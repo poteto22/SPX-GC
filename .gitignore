@@ -70,7 +70,7 @@ spx-content-repo.txt
 
 # IGNORE SPX DATAROOT
 # ...but allow specific files and folders for GitHub
-DATAROOT/
+DATAROOT/*
 !DATAROOT/MyFirstProject/
 !DATAROOT/MyFirstOGrafProject/
 !DATAROOT/Standard/
